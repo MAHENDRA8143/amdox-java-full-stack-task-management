@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// ✅ CRITICAL FIX: Add /api context path to baseURL
 const API_URL = "http://localhost:8080/api";
 
 const api = axios.create({
@@ -8,10 +7,9 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds timeout
+  timeout: 10000,
 });
 
-// Request interceptor: Add token to protected requests
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -23,28 +21,26 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: Handle errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('API Error:', error.response?.data || error.message);
-    
-    // Handle 401: Clear token and redirect to login
+
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
-    
+
     return Promise.reject(error);
   }
 );
 
 export const authService = {
-  register: (name, email, password, role = 'USER') => 
+  register: (name, email, password, role = 'USER') =>
     api.post('/auth/register', { name, email, password, role }),
-  
-  login: (email, password) => 
+
+  login: (email, password) =>
     api.post('/auth/login', { email, password }),
 };
 

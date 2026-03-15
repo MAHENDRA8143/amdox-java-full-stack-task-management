@@ -18,8 +18,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                             HttpServletResponse response,
                             Object handler) throws Exception {
-
-        // ✅ ALLOW ALL PREFLIGHT REQUESTS
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
@@ -27,7 +25,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         String path = request.getRequestURI();
 
-        // ✅ ALLOW AUTH ENDPOINTS
         if (path.startsWith("/auth")) {
             return true;
         }

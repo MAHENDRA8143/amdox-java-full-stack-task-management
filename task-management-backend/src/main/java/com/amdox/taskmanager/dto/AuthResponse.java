@@ -1,18 +1,16 @@
 package com.amdox.taskmanager.dto;
 
 public class AuthResponse {
-    
+
     private String email;
     private String role;
     private Long userId;
     private String token;
     private String message;
 
-    // Default constructor
     public AuthResponse() {
     }
 
-    // Full constructor
     public AuthResponse(String email, String role, Long userId, String token, String message) {
         this.email = email;
         this.role = role;
@@ -21,14 +19,12 @@ public class AuthResponse {
         this.message = message;
     }
 
-    // Getters
     public String getEmail() { return email; }
     public String getRole() { return role; }
     public Long getUserId() { return userId; }
     public String getToken() { return token; }
     public String getMessage() { return message; }
 
-    // Setters
     public void setEmail(String email) { this.email = email; }
     public void setRole(String role) { this.role = role; }
     public void setUserId(Long userId) { this.userId = userId; }

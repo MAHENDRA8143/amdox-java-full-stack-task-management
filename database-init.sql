@@ -1,8 +1,6 @@
--- Create Database
 CREATE DATABASE IF NOT EXISTS amdox_taskdb;
 USE amdox_taskdb;
 
--- Create Users Table
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -13,7 +11,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Tasks Table
 CREATE TABLE IF NOT EXISTS tasks (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
@@ -29,7 +26,6 @@ CREATE TABLE IF NOT EXISTS tasks (
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
--- Create Comments Table
 CREATE TABLE IF NOT EXISTS comments (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     message TEXT NOT NULL,
@@ -40,17 +36,13 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Create Indexes
 CREATE INDEX idx_user_email ON users(email);
 CREATE INDEX idx_task_status ON tasks(status);
 CREATE INDEX idx_task_assigned ON tasks(assigned_to);
 CREATE INDEX idx_comment_task ON comments(task_id);
 CREATE INDEX idx_comment_user ON comments(user_id);
 
--- Sample Data
 INSERT INTO users (name, email, password, role, active) VALUES
 ('Admin User', 'admin@amdox.com', '$2a$10$YFq4Y4KH3CxJZd.Z8jz2iufQsKEJvKV8D6c1HMcJ2yKGWaYMcKYi.', 'ADMIN', TRUE),
 ('John Editor', 'john@amdox.com', '$2a$10$YFq4Y4KH3CxJZd.Z8jz2iufQsKEJvKV8D6c1HMcJ2yKGWaYMcKYi.', 'EDITOR', TRUE),
 ('Jane Viewer', 'jane@amdox.com', '$2a$10$YFq4Y4KH3CxJZd.Z8jz2iufQsKEJvKV8D6c1HMcJ2yKGWaYMcKYi.', 'VIEWER', TRUE);
-
--- Note: The passwords above are encrypted (bcrypt) and represent: password123

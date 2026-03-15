@@ -16,7 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // ✅ Enable CORS for React frontend
         registry.addMapping("/**")
             .allowedOrigins("http://localhost:3000", "http://localhost:5173")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
@@ -27,15 +26,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // ✅ Register JWT interceptor for protected endpoints
         registry.addInterceptor(jwtInterceptor)
-            .addPathPatterns("/**")           // Apply to all endpoints
+            .addPathPatterns("/**")
             .excludePathPatterns(
-                "/auth/**",                       // Exclude auth endpoints
-                "/integrations/**",               // Exclude webhook endpoints
-                "/h2-console/**",                 // Exclude H2 console (if using)
-                "/error",                         // Exclude error pages
-                "/actuator/**"                    // Exclude actuator endpoints (if using)
+                "/auth/**",
+                "/integrations/**",
+                "/h2-console/**",
+                "/error",
+                "/actuator/**"
             );
     }
 }

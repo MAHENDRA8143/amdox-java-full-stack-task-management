@@ -57,7 +57,6 @@ public class TaskService {
 
         Task task = taskOpt.get();
 
-        // Check authorization - ADMIN can edit any, EDITOR can edit own
         User user = userRepository.findById(userId).orElse(null);
         if (user != null && !user.getRole().equals("ADMIN")) {
             if (!task.getCreatedBy().getId().equals(userId)) {
@@ -88,7 +87,6 @@ public class TaskService {
 
         Task task = taskOpt.get();
 
-        // Check authorization
         User user = userRepository.findById(userId).orElse(null);
         if (user != null && !user.getRole().equals("ADMIN")) {
             if (!task.getCreatedBy().getId().equals(userId)) {

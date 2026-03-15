@@ -1,6 +1,9 @@
 package com.amdox.taskmanager.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,10 +19,9 @@ public class JwtTokenProvider {
     private String jwtSecret;
 
     @Value("${jwt.expiration}")
-    private long jwtExpiration; // Milliseconds (e.g., 86400000 = 24h)
+    private long jwtExpiration;
 
     private SecretKey getSigningKey() {
-        // Use StandardCharsets for safety + Keys helper for proper key length
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -35,7 +37,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Helper to avoid duplicate parsing
     private Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -61,9 +62,9 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJws(token); // Validates signature, expiration, malformed structure
+                .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) { // Catch specific JWT exceptions
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }

@@ -1,6 +1,11 @@
 package com.amdox.taskmanager.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -20,9 +25,8 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String role; // "USER", "ADMIN", etc.
+    private String role;
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

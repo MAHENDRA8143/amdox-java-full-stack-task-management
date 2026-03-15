@@ -22,51 +22,45 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        // Check if email already exists
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return new AuthResponse(null, null, null, null, "Email already exists");
         }
 
-        // Create new user
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole()); // String role
+        user.setRole(request.getRole());
         user.setName(request.getName());
 
         User savedUser = userRepository.save(user);
 
-        // Return response with user data (token will be added in controller)
         return new AuthResponse(
             savedUser.getEmail(),
-            savedUser.getRole(), // Directly use String
+            savedUser.getRole(),
             savedUser.getId(),
-            null, // Token will be set in controller
+            null,
             "Registration successful"
         );
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Find user by email
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
-        
+
         if (userOptional.isEmpty()) {
             return new AuthResponse(null, null, null, null, "Invalid email or password");
         }
 
         User user = userOptional.get();
 
-        // Validate password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return new AuthResponse(null, null, null, null, "Invalid email or password");
         }
 
-        // Return response with user data (token will be added in controller)
         return new AuthResponse(
             user.getEmail(),
-            user.getRole(), // Directly use String
+            user.getRole(),
             user.getId(),
-            null, // Token will be set in controller
+            null,
             "Login successful"
         );
     }

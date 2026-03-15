@@ -12,8 +12,8 @@ import java.time.LocalDate;
 public class TaskRequest {
     private String title;
     private String description;
-    private String priority; // HIGH, MEDIUM, LOW
-    private String status; // TODO, IN_PROGRESS, DONE
+    private String priority;
+    private String status;
     private LocalDate dueDate;
     private Long assignedToId;
 }

@@ -58,7 +58,6 @@ public class CommentService {
 
         Comment comment = commentOpt.get();
 
-        // Check authorization - only comment creator or admin can delete
         User user = userRepository.findById(userId).orElse(null);
         if (user != null && !user.getRole().equals("ADMIN")) {
             if (!comment.getUser().getId().equals(userId)) {

@@ -7,14 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class RegisterRequest {
     private String name;
     private String email;
     private String password;
-    private String role; // e.g., "USER", "ADMIN"
+    private String role;
 
-    // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
