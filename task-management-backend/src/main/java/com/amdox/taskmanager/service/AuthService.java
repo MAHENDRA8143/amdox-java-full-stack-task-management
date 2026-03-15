@@ -1,0 +1,73 @@
+package com.amdox.taskmanager.service;
+
+import com.amdox.taskmanager.dto.AuthResponse;
+import com.amdox.taskmanager.dto.LoginRequest;
+import com.amdox.taskmanager.dto.RegisterRequest;
+import com.amdox.taskmanager.model.User;
+import com.amdox.taskmanager.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public AuthResponse register(RegisterRequest request) {
+        // Check if email already exists
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return new AuthResponse(null, null, null, null, "Email already exists");
+        }
+
+        // Create new user
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole()); // String role
+        user.setName(request.getName());
+
+        User savedUser = userRepository.save(user);
+
+        // Return response with user data (token will be added in controller)
+        return new AuthResponse(
+            savedUser.getEmail(),
+            savedUser.getRole(), // Directly use String
+            savedUser.getId(),
+            null, // Token will be set in controller
+            "Registration successful"
+        );
+    }
+
+    public AuthResponse login(LoginRequest request) {
+        // Find user by email
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        
+        if (userOptional.isEmpty()) {
+            return new AuthResponse(null, null, null, null, "Invalid email or password");
+        }
+
+        User user = userOptional.get();
+
+        // Validate password
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return new AuthResponse(null, null, null, null, "Invalid email or password");
+        }
+
+        // Return response with user data (token will be added in controller)
+        return new AuthResponse(
+            user.getEmail(),
+            user.getRole(), // Directly use String
+            user.getId(),
+            null, // Token will be set in controller
+            "Login successful"
+        );
+    }
+}
